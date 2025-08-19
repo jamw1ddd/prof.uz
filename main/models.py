@@ -63,7 +63,6 @@ class IntroText(models.Model):
     def __str__(self):
         return f"{self.section.title} - {self.text[:30]}"
 
-# 1-qism: Loyiha haqida
 class ProjectSection(models.Model):
     subtitle = models.CharField(max_length=255, verbose_name="Kichik sarlavha")  # Mening kelajagim o'z qo'limda
     title = models.CharField(max_length=255, verbose_name="Sarlavha")  # Loyiha haqida
@@ -74,7 +73,6 @@ class ProjectSection(models.Model):
     def __str__(self):
         return self.title
 
-# 1-qism tugmalari (auditoriya: ota-onalar, bitiruvchilar, ustozlar)
 class Audience(models.Model):
     project = models.ForeignKey(ProjectSection, on_delete=models.CASCADE, related_name="audiences")
     name = models.CharField(max_length=100, verbose_name="Nomi")  # Ota-onalarga
@@ -83,7 +81,6 @@ class Audience(models.Model):
     def __str__(self):
         return self.name
 
-# 2-qism: Kelajakni hozirdan quring
 class FutureDream(models.Model):
     title = models.CharField(max_length=255, verbose_name="Bo'lim sarlavhasi", default="Kelajakni hozirdan quring")
     child_profession = models.CharField(max_length=255, verbose_name="Matn")  # Men katta bo'lsam shifokor bo'laman
@@ -175,7 +172,7 @@ class ProfessionAbility(models.Model):
         return f"{self.profession.name} - {self.title}"
 
 
-class AbilityItem(models.Model):
+class ProfessionAbilityItem(models.Model):
     ability = models.ForeignKey(ProfessionAbility, on_delete=models.CASCADE, related_name="items")
     icon = models.ImageField(upload_to="profession/abilities/icons/")
     text = models.CharField(max_length=255)
@@ -290,7 +287,6 @@ class TestAbout(models.Model):
 
 class Test(models.Model):
     question = models.TextField()
-    result = models.OneToOneField("TestResult", on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return self.question[:50]
