@@ -6,7 +6,7 @@ User = get_user_model()
 
 class Starter(models.Model):
     content = models.TextField(verbose_name="Kontent")
-    picture = models.ImageField(upload_to="starter/", blank=True, null=True, verbose_name="Rasm")
+    picture = models.ImageField(upload_to="picture/starter/", blank=True, null=True, verbose_name="Rasm")
 
     def __str__(self):
         return f"Starter - {self.content[:30]}"
@@ -68,7 +68,7 @@ class ProjectSection(models.Model):
     title = models.CharField(max_length=255, verbose_name="Sarlavha")  # Loyiha haqida
     description_title = models.CharField(max_length=255, verbose_name="Asosiy sarlavha")  # Qobiliyat va imkoniyat...
     description = models.TextField(verbose_name="Izoh / Matn")
-    image = models.ImageField(upload_to="project/", blank=True, null=True, verbose_name="Rasm")
+    image = models.ImageField(upload_to="picture/project/", blank=True, null=True, verbose_name="Rasm")
 
     def __str__(self):
         return self.title
@@ -84,7 +84,7 @@ class Audience(models.Model):
 class FutureDream(models.Model):
     title = models.CharField(max_length=255, verbose_name="Bo'lim sarlavhasi", default="Kelajakni hozirdan quring")
     child_profession = models.CharField(max_length=255, verbose_name="Matn")  # Men katta bo'lsam shifokor bo'laman
-    image = models.ImageField(upload_to="future/", blank=True, null=True, verbose_name="Rasm")
+    image = models.ImageField(upload_to="picture/future/", blank=True, null=True, verbose_name="Rasm")
 
     def __str__(self):
         return self.child_profession
@@ -100,7 +100,7 @@ class StepItem(models.Model):
     section = models.ForeignKey(StepSection, on_delete=models.CASCADE, related_name="steps")
     number = models.PositiveIntegerField()
     text = models.CharField(max_length=255)
-    icon = models.ImageField(upload_to="step_icons/", blank=True, null=True) 
+    icon = models.ImageField(upload_to="picture/step_icons/", blank=True, null=True) 
 
     def __str__(self):
         return f"{self.number}. {self.text}"
@@ -134,7 +134,7 @@ class Subject(models.Model):
 class Profession(models.Model):
     name = models.CharField(max_length=255)   # Masalan: Shifokor, Dasturchi
     slug = models.SlugField(unique=True)      # URL uchun qulay
-    image = models.ImageField(upload_to="professions/main/", blank=True, null=True)
+    image = models.ImageField(upload_to="picture/professions/main/", blank=True, null=True)
     category = models.ManyToManyField(ProfessionCategory, related_name="professions")
     subjects = models.ManyToManyField(Subject, related_name="professions")
 
@@ -145,7 +145,7 @@ class ProfessionDetail(models.Model):
     profession = models.OneToOneField(Profession, on_delete=models.CASCADE, related_name="detail")
     title = models.CharField(max_length=255)
     description = models.TextField()
-    image = models.ImageField(upload_to="professions/details/")
+    image = models.ImageField(upload_to="picture/professions/details/")
 
     def __str__(self):
         return f"Detail of {self.profession.name}"
@@ -153,7 +153,7 @@ class ProfessionDetail(models.Model):
 
 class ProfessionBlock(models.Model):
     detail = models.ForeignKey(ProfessionDetail, on_delete=models.CASCADE, related_name="blocks")
-    icon = models.ImageField(upload_to="profession_icons/", blank=True, null=True)
+    icon = models.ImageField(upload_to="picture/profession_icons/", blank=True, null=True)
     title = models.CharField(max_length=255)
     text = models.TextField()
 
@@ -163,7 +163,7 @@ class ProfessionBlock(models.Model):
 
 class ProfessionAbility(models.Model):
     profession = models.ForeignKey(Profession, on_delete=models.CASCADE, related_name="abilities")
-    picture = models.ImageField(upload_to="profession/abilities/")
+    picture = models.ImageField(upload_to="picture/profession/abilities/")
     label = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -174,7 +174,7 @@ class ProfessionAbility(models.Model):
 
 class ProfessionAbilityItem(models.Model):
     ability = models.ForeignKey(ProfessionAbility, on_delete=models.CASCADE, related_name="items")
-    icon = models.ImageField(upload_to="profession/abilities/icons/")
+    icon = models.ImageField(upload_to="picture/profession/abilities/icons/")
     text = models.CharField(max_length=255)
 
     def __str__(self):
@@ -226,7 +226,7 @@ class GoodItem(models.Model):
 
 class MoneySection(models.Model):
     profession = models.OneToOneField(Profession, on_delete=models.CASCADE, related_name="money")
-    image = models.ImageField(upload_to='money/', blank=True, null=True)
+    image = models.ImageField(upload_to='picture/money/', blank=True, null=True)
     title = models.CharField(max_length=255)
     text = models.TextField()
 
@@ -256,7 +256,7 @@ class WhereWorks(models.Model):
 
 class WorkLogo(models.Model):
     section = models.ForeignKey(WhereWorks, related_name="logos", on_delete=models.CASCADE)
-    logo = models.ImageField(upload_to="logos/")
+    logo = models.ImageField(upload_to="picture/logos/")
 
     def __str__(self):
         return f"{self.section.profession.name} - Logo"
@@ -271,7 +271,7 @@ class Region(models.Model):
 class TestAbout(models.Model):
     title = models.CharField(max_length=255)
     text = models.TextField()
-    picture = models.ImageField(upload_to="test_about/", blank=True, null=True)
+    picture = models.ImageField(upload_to="picture/test_about/", blank=True, null=True)
 
     # Notification (bitta)
     notification_icon = models.ImageField(upload_to="test_about/notifications/", blank=True, null=True)
@@ -294,7 +294,7 @@ class Test(models.Model):
 class Answer(models.Model):
     test = models.ForeignKey(Test, related_name="answers", on_delete=models.CASCADE)
     text = models.CharField(max_length=255, blank=True, null=True)
-    image = models.ImageField(upload_to="answers/", blank=True, null=True)
+    image = models.ImageField(upload_to="picture/answers/", blank=True, null=True)
     is_correct = models.BooleanField(default=False)  # kerak bo‘lsa javob to‘g‘ri yoki yo‘qligini belgilang
 
     def __str__(self):
@@ -312,7 +312,7 @@ class TestResult(models.Model):
 
 class InterestItem(models.Model):
     result = models.ForeignKey(TestResult, related_name="interests", on_delete=models.CASCADE)
-    icon = models.ImageField(upload_to="interests/", blank=True, null=True)
+    icon = models.ImageField(upload_to="picture/interests/", blank=True, null=True)
     text = models.CharField(max_length=255)
 
     def __str__(self):
@@ -320,7 +320,7 @@ class InterestItem(models.Model):
 
 class AbilityItem(models.Model):
     result = models.ForeignKey(TestResult, related_name="abilities", on_delete=models.CASCADE)
-    icon = models.ImageField(upload_to="abilities/", blank=True, null=True)
+    icon = models.ImageField(upload_to="picture/abilities/", blank=True, null=True)
     text = models.CharField(max_length=255)
 
     def __str__(self):
@@ -365,7 +365,7 @@ class PersonalInfo(models.Model):
     email = models.EmailField()
     country = models.CharField(max_length=100)
     birthdate = models.DateField()
-    picture = models.ImageField(upload_to="resumes/photos/", blank=True, null=True)
+    picture = models.ImageField(upload_to="picture/resumes/photos/", blank=True, null=True)
     
     GENDER_CHOICES = (
         ("male", "Erkak"),
@@ -429,8 +429,8 @@ class Career(models.Model):
 class ResumeTemplate(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    preview = models.ImageField(upload_to="resumes/templates/")  # shablon rasmi
-    file = models.FileField(upload_to="resumes/templates/files/", blank=True, null=True)  # pdf/docx template
+    preview = models.ImageField(upload_to="picture/resumes/templates/")  # shablon rasmi
+    file = models.FileField(upload_to="picture/resumes/templates/files/", blank=True, null=True)  # pdf/docx template
 
     def __str__(self):
         return self.title
@@ -438,7 +438,7 @@ class ResumeTemplate(models.Model):
 class LandingResume(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    picture = models.ImageField(upload_to="landing_resume/")
+    picture = models.ImageField(upload_to="picture/landing_resume/")
     button_text = models.CharField(max_length=100)
 
     def __str__(self):
@@ -447,7 +447,7 @@ class LandingResume(models.Model):
 class LandingResumeBlock(models.Model):
     landing_resume = models.ForeignKey(LandingResume, on_delete=models.CASCADE, related_name="blocks")
     title = models.CharField(max_length=255)
-    icon = models.ImageField(upload_to="landing_resume/icons/")
+    icon = models.ImageField(upload_to="picture/landing_resume/icons/")
     text = models.TextField()
 
     def __str__(self):
@@ -465,7 +465,7 @@ class ResumeStepItem(models.Model):
     step = models.ForeignKey(ResumeStep, on_delete=models.CASCADE, related_name="items")
     number = models.PositiveIntegerField()
     title = models.CharField(max_length=255)
-    icon = models.ImageField(upload_to="resume_steps/icons/")
+    icon = models.ImageField(upload_to="picture/resume_steps/icons/")
     text = models.TextField()
 
     class Meta:
@@ -476,7 +476,7 @@ class ResumeStepItem(models.Model):
 
 class ResumeInfo(models.Model):
     title = models.CharField(max_length=200)
-    picture = models.ImageField(upload_to="resume_pictures/", blank=True, null=True)
+    picture = models.ImageField(upload_to="picture/resume_pictures/", blank=True, null=True)
     text = models.TextField(blank=True)
     text2 = models.TextField(blank=True)
     button_text = models.CharField(max_length=50, default="Batafsil")
@@ -529,7 +529,7 @@ class About(models.Model):
 
 class AboutImage(models.Model):
     about = models.ForeignKey(About, on_delete=models.CASCADE, related_name="images")
-    picture = models.ImageField(upload_to="about_pictures/")
+    picture = models.ImageField(upload_to="picture/about_pictures/")
 
     def __str__(self):
         return f"Image for {self.about.id}"

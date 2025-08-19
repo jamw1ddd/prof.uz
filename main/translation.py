@@ -26,11 +26,9 @@ class IntroSectionTranslationOptions(TranslationOptions):
 class IntroButtonTranslationOptions(TranslationOptions):
     fields = ("text",)
 
-
 @register(IntroText)
 class IntroTextTranslationOptions(TranslationOptions):
     fields = ("text",)
-
 
 @register(ProjectSection)
 class ProjectSectionTranslationOptions(TranslationOptions):
