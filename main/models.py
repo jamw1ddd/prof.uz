@@ -26,6 +26,7 @@ class UserSettings(models.Model):
     LANGUAGE_CHOICES = [
         ("uz", "O‘zbek"),
         ("ru", "Русский"),
+        ("en", "English")
     ]
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -40,8 +41,7 @@ class UserSettings(models.Model):
 class IntroSection(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    # buttonlarni ko‘paytirib bo‘lishi uchun alohida model
-    # IntroSection bilan bog‘lanadi
+
     class Meta:
         verbose_name = "Intro Section"
         verbose_name_plural = "Intro Sections"
@@ -83,7 +83,7 @@ class Audience(models.Model):
 
 class FutureDream(models.Model):
     title = models.CharField(max_length=255, verbose_name="Bo'lim sarlavhasi", default="Kelajakni hozirdan quring")
-    child_profession = models.CharField(max_length=255, verbose_name="Matn")  # Men katta bo'lsam shifokor bo'laman
+    child_profession = models.CharField(max_length=255, verbose_name="Matn") 
     image = models.ImageField(upload_to="picture/future/", blank=True, null=True, verbose_name="Rasm")
 
     def __str__(self):
@@ -132,7 +132,7 @@ class Subject(models.Model):
         return self.name
 
 class Profession(models.Model):
-    name = models.CharField(max_length=255)   # Masalan: Shifokor, Dasturchi
+    name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)      # URL uchun qulay
     image = models.ImageField(upload_to="picture/professions/main/", blank=True, null=True)
     category = models.ManyToManyField(ProfessionCategory, related_name="professions")
@@ -150,7 +150,6 @@ class ProfessionDetail(models.Model):
     def __str__(self):
         return f"Detail of {self.profession.name}"
 
-
 class ProfessionBlock(models.Model):
     detail = models.ForeignKey(ProfessionDetail, on_delete=models.CASCADE, related_name="blocks")
     icon = models.ImageField(upload_to="picture/profession_icons/", blank=True, null=True)
@@ -159,7 +158,6 @@ class ProfessionBlock(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.detail.profession.name})"
-
 
 class ProfessionAbility(models.Model):
     profession = models.ForeignKey(Profession, on_delete=models.CASCADE, related_name="abilities")
@@ -171,7 +169,6 @@ class ProfessionAbility(models.Model):
     def __str__(self):
         return f"{self.profession.name} - {self.title}"
 
-
 class ProfessionAbilityItem(models.Model):
     ability = models.ForeignKey(ProfessionAbility, on_delete=models.CASCADE, related_name="items")
     icon = models.ImageField(upload_to="picture/profession/abilities/icons/")
@@ -179,7 +176,6 @@ class ProfessionAbilityItem(models.Model):
 
     def __str__(self):
         return f"{self.ability.profession.name} - {self.text}"
-
 
 class GoodBadSection(models.Model):
     profession = models.OneToOneField(Profession, on_delete=models.CASCADE, related_name="good_bad")
@@ -189,14 +185,12 @@ class GoodBadSection(models.Model):
     def __str__(self):
         return f"{self.profession.name} - Good/Bad"
 
-
 class BadBlock(models.Model):
     section = models.ForeignKey(GoodBadSection, related_name="bad_blocks", on_delete=models.CASCADE)
     main_icon = models.CharField(max_length=100)
 
     def __str__(self):
         return f"Bad Block for {self.section.profession.name}"
-
 
 class BadItem(models.Model):
     block = models.ForeignKey(BadBlock, related_name="items", on_delete=models.CASCADE)
@@ -206,14 +200,12 @@ class BadItem(models.Model):
     def __str__(self):
         return self.text
 
-
 class GoodBlock(models.Model):
     section = models.ForeignKey(GoodBadSection, related_name="good_blocks", on_delete=models.CASCADE)
     main_icon = models.CharField(max_length=100)
 
     def __str__(self):
         return f"Good Block for {self.section.profession.name}"
-
 
 class GoodItem(models.Model):
     block = models.ForeignKey(GoodBlock, related_name="items", on_delete=models.CASCADE)
@@ -222,7 +214,6 @@ class GoodItem(models.Model):
 
     def __str__(self):
         return self.text
-
 
 class MoneySection(models.Model):
     profession = models.OneToOneField(Profession, on_delete=models.CASCADE, related_name="money")
@@ -233,7 +224,6 @@ class MoneySection(models.Model):
     def __str__(self):
         return f"{self.profession.name} - Money"
 
-
 class MoneyBlock(models.Model):
     section = models.ForeignKey(MoneySection, related_name="blocks", on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
@@ -241,7 +231,6 @@ class MoneyBlock(models.Model):
 
     def __str__(self):
         return f"{self.section.profession.name} - {self.title}"
-
 
 class WhereWorks(models.Model):
     profession = models.OneToOneField(Profession, on_delete=models.CASCADE, related_name="where_works")
@@ -252,7 +241,6 @@ class WhereWorks(models.Model):
 
     def __str__(self):
         return f"{self.profession.name} - Where Works"
-
 
 class WorkLogo(models.Model):
     section = models.ForeignKey(WhereWorks, related_name="logos", on_delete=models.CASCADE)
@@ -267,18 +255,13 @@ class Region(models.Model):
     def __str__(self):
         return self.name
 
-
 class TestAbout(models.Model):
     title = models.CharField(max_length=255)
     text = models.TextField()
     picture = models.ImageField(upload_to="picture/test_about/", blank=True, null=True)
-
-    # Notification (bitta)
     notification_icon = models.ImageField(upload_to="test_about/notifications/", blank=True, null=True)
     notification_title = models.CharField(max_length=255, blank=True)
     notification_text = models.TextField(blank=True)
-
-    # Button (bitta)
     button_url = models.URLField(blank=True)
     button_text = models.CharField(max_length=100, blank=True)
 
@@ -349,14 +332,11 @@ class Resume(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="resume")
     shaxsiy_text = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
-    # Shablon tanlash
     shablon_text = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.username} - Resume"
 
-# Shaxsiy ma'lumotlar
 class PersonalInfo(models.Model):
     resume = models.OneToOneField(Resume, on_delete=models.CASCADE, related_name="personal_info")
     name = models.CharField(max_length=100)
@@ -376,7 +356,6 @@ class PersonalInfo(models.Model):
     def __str__(self):
         return f"{self.name} {self.surname}"
 
-# Ta'lim
 class Education(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="educations")
     school_finish = models.BooleanField(default=False)
@@ -389,7 +368,6 @@ class Education(models.Model):
     def __str__(self):
         return f"{self.school} - {self.city}"
 
-# Til bilish
 class Language(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="languages")
     LANGUAGE_CHOICES = (
@@ -403,7 +381,6 @@ class Language(models.Model):
     def __str__(self):
         return self.language_type
 
-# Ish tajribasi
 class WorkExperience(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="work_experiences")
     work = models.BooleanField(default=False)
@@ -416,7 +393,6 @@ class WorkExperience(models.Model):
     def __str__(self):
         return self.work_name if self.work_name else "No work"
 
-# Kariera
 class Career(models.Model):
     resume = models.OneToOneField(Resume, on_delete=models.CASCADE, related_name="career")
     profession = models.CharField(max_length=200)
@@ -460,7 +436,6 @@ class ResumeStep(models.Model):
     def __str__(self):
         return self.title
 
-
 class ResumeStepItem(models.Model):
     step = models.ForeignKey(ResumeStep, on_delete=models.CASCADE, related_name="items")
     number = models.PositiveIntegerField()
@@ -485,7 +460,6 @@ class ResumeInfo(models.Model):
         return self.title
     
 class Profile(models.Model):
-    # Shaxsiy ma'lumotlar
     shaxsiy_text = models.TextField(blank=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
@@ -496,7 +470,6 @@ class Profile(models.Model):
     letter = models.CharField(max_length=10, blank=True, null=True)
     email = models.EmailField(unique=True)
     button_text = models.CharField(max_length=50, default="Saqlash")
-
     # Parolni yangilash
     old_password = models.CharField(max_length=128, blank=True, null=True)
     new_password = models.CharField(max_length=128, blank=True, null=True)
@@ -525,7 +498,6 @@ class About(models.Model):
 
     def __str__(self):
         return "About section"
-
 
 class AboutImage(models.Model):
     about = models.ForeignKey(About, on_delete=models.CASCADE, related_name="images")

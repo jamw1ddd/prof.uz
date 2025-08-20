@@ -236,11 +236,9 @@ class ProfileTranslationOptions(TranslationOptions):
 class ContactTranslationOptions(TranslationOptions):
     fields = ("text", "location")
 
-
 @register(ContactInfo)
 class ContactInfoTranslationOptions(TranslationOptions):
     fields = ("text",)
-
 
 @register(About)
 class AboutTranslationOptions(TranslationOptions):

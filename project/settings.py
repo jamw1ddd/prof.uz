@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     # Custom apps
     'main',
 ]
@@ -108,6 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGES = (
     ("uz", "O‘zbekcha"),
     ("ru", "Русский"),
+    ("en", "English"),
 )
 LANGUAGE_CODE = "uz"  
 
@@ -116,7 +118,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
