@@ -17,20 +17,21 @@ class ProfessionCategory(models.Model):
         return self.name
 
 class Profession(models.Model):
-    name = models.CharField(max_length=255)
     image = models.ImageField(upload_to="media/professions/")
     category = models.ForeignKey(ProfessionCategory, on_delete=models.CASCADE)
-    subjects = models.ForeignKey(Subject, on_delete=models.CASCADE)
-
+    subjects = models.ManyToManyField(Subject)
+    
     def __str__(self):
-        return self.name
+        return self.category.name
 
 class ProfessionDetail(models.Model):
     profession = models.ForeignKey(Profession, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to="media/professions_details/")
-
+    high = models.DecimalField(max_digits=12, decimal_places=2)
+    middle = models.DecimalField(max_digits=12, decimal_places=2)
+    low = models.DecimalField(max_digits=12, decimal_places=2)
 
 class ProfessionBlock(models.Model):
     detail = models.ForeignKey(ProfessionDetail, on_delete=models.CASCADE)
@@ -79,19 +80,6 @@ class GoodItem(models.Model):
     block = models.ForeignKey(GoodBlock, on_delete=models.CASCADE)
     icon = models.CharField(max_length=100)
     text = models.CharField(max_length=255)
-
-
-class MoneySection(models.Model):
-    profession = models.ForeignKey(Profession, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='media/money/')
-    title = models.CharField(max_length=255)
-    text = models.TextField()
-
-
-class MoneyItem(models.Model):
-    section = models.ForeignKey(MoneySection, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    text = models.TextField()
 
 
 class WhereWorks(models.Model):

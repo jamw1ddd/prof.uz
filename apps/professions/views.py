@@ -1,20 +1,24 @@
 from rest_framework import generics
-from apps.professions.models import Profession, ProfessionDetail
-from apps.professions.serializers import ProfessionSerializer, ProfessionDetailSerializer
-from rest_framework.response import Response
+from django.db.models import Max, Min
+from apps.professions.models import Profession
+from apps.professions.serializers import ProfessionSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from apps.professions.filters import ProfessionFilter
 from rest_framework.filters import OrderingFilter
 
 
 class ProfessionListView(generics.ListAPIView):
-    queryset = Profession.objects.all()
     serializer_class = ProfessionSerializer
-    filter_backends = [DjangoFilterBackend,OrderingFilter]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = ProfessionFilter
-    ordering_fields = ['name']
-    ordering = ['name'] 
+    ordering_fields = ['category_id', 'max_high', 'min_low']  
+    ordering = ['category_id']
 
+    def get_queryset(self):
+        return Profession.objects.annotate(
+            max_high=Max('professiondetail__high'),
+            min_low=Min('professiondetail__low')    
+        )
 
 class ProfessionDetailView(generics.RetrieveAPIView):
     queryset = Profession.objects.all()

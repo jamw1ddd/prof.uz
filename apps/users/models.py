@@ -28,7 +28,6 @@ class UserSettings(models.Model):
 
 class Resume(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    shaxsiy_text = models.CharField(max_length=255, default="Shaxsiy")
     created_at = models.DateTimeField(auto_now_add=True)
     shablon_text = models.TextField()
 
@@ -43,7 +42,7 @@ class PersonalInfo(models.Model):
     email = models.EmailField()
     country = models.CharField(max_length=100)
     birthdate = models.DateField()
-    picture = models.ImageField(upload_to="media/resume_photos/")
+    picture = models.ImageField(upload_to="media/resume_photos/",blank=True, null=True)
     
     GENDER_CHOICES = (
         ("male", "Erkak"),
@@ -55,7 +54,7 @@ class PersonalInfo(models.Model):
         return f"{self.name} {self.surname}"
 
 class Education(models.Model):
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE,related_name="education")
     school_finish = models.BooleanField(default=False)
     city = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
@@ -68,7 +67,7 @@ class Education(models.Model):
 
 
 class Language(models.Model):
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE,related_name="languages")
     LANGUAGE_CHOICES = (
         ("native", "Ona tili"),
         ("english", "Ingliz tili"),
@@ -80,7 +79,7 @@ class Language(models.Model):
 
 
 class WorkExperience(models.Model):
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE,related_name="experiences")
     work = models.BooleanField(default=False)
     work_name = models.CharField(max_length=200, blank=True, null=True)
     profession = models.CharField(max_length=200, blank=True, null=True)
@@ -90,12 +89,13 @@ class WorkExperience(models.Model):
 
 
 class Career(models.Model):
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE,related_name="careers")
     profession = models.CharField(max_length=200)
     profession_category = models.CharField(max_length=200)
 
 
 class ResumeTemplate(models.Model):
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name="templates")
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     preview = models.ImageField(upload_to="media/resume_templates/")
