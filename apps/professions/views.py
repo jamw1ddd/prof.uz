@@ -11,8 +11,8 @@ class ProfessionListView(generics.ListAPIView):
     serializer_class = ProfessionSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = ProfessionFilter
-    ordering_fields = ['category_id', 'max_high', 'min_low']  
-    ordering = ['category_id']
+    ordering_fields = ['category__name', 'max_high', 'min_low']  
+    ordering = ['category__name']
 
     def get_queryset(self):
         return Profession.objects.annotate(
